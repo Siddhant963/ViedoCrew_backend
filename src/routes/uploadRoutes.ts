@@ -1,13 +1,20 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { protect } from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
+// Ensure uploads directory exists
+const uploadDir = path.join(__dirname, '../uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'uploads/');
+    cb(null, uploadDir); // use absolute path
   },
   filename(req, file, cb) {
     cb(null, `${Date.now()}-${file.originalname}`);
@@ -30,10 +37,10 @@ const upload = multer({
 
 router.post('/image', protect, upload.single('image'), (req, res) => {
   res.json({ filePath: `/uploads/${req.file?.filename}` });
-}); // done tested
+});
 
 router.post('/video', protect, upload.single('video'), (req, res) => {
   res.json({ filePath: `/uploads/${req.file?.filename}` });
-}); // done tested
+});
 
 export default router;
