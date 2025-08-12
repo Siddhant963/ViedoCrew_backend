@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
@@ -6,6 +7,7 @@ import authRoutes from './routes/authRoutes';
 import portfolioRoutes from './routes/portfolioRoutes';
 import contactRoutes from './routes/contactRoutes';
 import uploadRoutes from './routes/uploadRoutes';
+import { METHODS } from 'http';
 
 dotenv.config();
 
@@ -14,6 +16,11 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cors({
+  origin: ["https://video-crew-frontend-mnmu.vercel.app:5173"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}))
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Routes
