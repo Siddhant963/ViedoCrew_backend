@@ -17,7 +17,10 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ["https://video-crew-frontend-mnmu.vercel.app:5173"],
+  origin: [
+    "https://video-crew-frontend-mnmu.vercel.app", // Production
+    "http://localhost:5173" // Local dev
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }))
